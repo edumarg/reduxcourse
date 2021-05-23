@@ -15,6 +15,6 @@ store.dispatch(actions.bugResolved({ id: 1 }));
 
 unsubscribe();
 
-store.dispatch(actions.bugRemoved({ id: 1 }));
+store.dispatch(actions.bugRemoved({ id: 2 }));
 
 console.log("--store--", store.getState());

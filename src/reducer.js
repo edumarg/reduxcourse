@@ -15,7 +15,7 @@ function reducer(state = [], action) {
     return state.filter((bug) => bug.id !== action.payload.id);
   else if (action.type === actions.BUG_RESOLVED)
     return state.map((bug) =>
-      bug !== action.payload.id ? bug : { ...bug, resolve: true }
+      bug.id !== action.payload.id ? bug : { ...bug, resolved: true }
     );
 
   return state;

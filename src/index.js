@@ -6,4 +6,23 @@ store.subscribe(() => {
 });
 
 store.dispatch(actions.bugAdded("bug 1!!!"));
-console.log(store.getState());
+console.log("--store--", store.getState());
+
+store.dispatch(actions.bugAdded("bug 2!!!"));
+console.log("--store--", store.getState());
+
+store.dispatch(actions.bugResolved(1));
+
+console.log("--store--", store.getState());
+
+store.dispatch(actions.bugResolved(2));
+
+console.log("--store--", store.getState());
+
+store.dispatch(actions.bugRemoved(1));
+
+console.log("--store--", store.getState());
+
+store.dispatch(actions.bugRemoved(2));
+
+console.log("--store--", store.getState());

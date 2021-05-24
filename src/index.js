@@ -3,9 +3,12 @@ import {
   bugAdded,
   bugResolved,
   bugRemoved,
+  bugAssignedToUser,
   getUnresolvedBugs,
+  getBugsbyUser,
 } from "./store/bugs";
 import { projectAdded, projectRemoved } from "./store/projects";
+import { userAdded } from "./store/users";
 
 const store = configureStore();
 
@@ -32,3 +35,14 @@ console.log("--store--", store.getState());
 
 const unresolvedBugs = getUnresolvedBugs(store.getState());
 console.log("Unresolved bugs: ", unresolvedBugs);
+
+// Users store
+store.dispatch(userAdded({ name: "User 1" }));
+store.dispatch(userAdded({ name: "User 2" }));
+console.log("--store--", store.getState());
+
+store.dispatch(bugAssignedToUser({ bugId: 3, userId: 1 }));
+store.dispatch(bugAssignedToUser({ bugId: 2, userId: 1 }));
+
+const bugsByUserid = getBugsbyUser(1)(store.getState());
+console.log("Bugs from user 1", bugsByUserid);

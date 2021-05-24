@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createSelector } from "reselect";
 
 let lastId = 0;
 
@@ -23,11 +24,27 @@ const slice = createSlice({
       const index = state.findIndex((bug) => bug.id === action.payload.id);
       state.splice(index, 1);
     },
+
+    bugAssignedToUser: (state, action) => {
+      const { bugId, userId } = action.payload;
+      const index = state.findIndex((bug) => bug.id === bugId);
+      state[index].userId = userId;
+    },
   },
 });
 
 export default slice.reducer;
-export const { bugAdded, bugResolved, bugRemoved } = slice.actions;
-// Selector
-export const getUnresolvedBugs = (state) =>
-  state.entities.bugs.filter((bug) => !bug.resolved);
+export const { bugAdded, bugResolved, bugRemoved, bugAssignedToUser } =
+  slice.actions;
+
+// Selector using reselect lib ( Memoizing selector)
+export const getUnresolvedBugs = createSelector(
+  (state) => state.entities.bugs,
+  (bugs) => bugs.filter((bug) => !bug.resolved)
+);
+
+export const getBugsbyUser = (userId) =>
+  createSelector(
+    (state) => state.entities.bugs,
+    (bugs) => bugs.filter((bug) => bug.userId === userId)
+  );

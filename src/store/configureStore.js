@@ -1,14 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-
-// bugs store
-// import reducer from "./bugs";
-
-// export default function () {
-//   return configureStore({ reducer });
-// }
-
-// projects store
-import reducer from "./projects";
+import reducer from "./reducer";
 
 export default function () {
   return configureStore({ reducer });

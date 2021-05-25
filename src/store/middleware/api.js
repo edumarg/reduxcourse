@@ -13,7 +13,6 @@ const api =
     const { url, method, data, onStart, onSuccess, onError } = action.payload;
     if (onStart) dispatch({ type: onStart });
     next(action);
-
     try {
       const response = await axios.request({
         baseURL: " http://localhost:9001/api",

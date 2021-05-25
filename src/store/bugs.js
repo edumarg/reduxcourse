@@ -2,8 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { apiRequested } from "./api";
 
-let lastId = 0;
-
 // Slice
 const slice = createSlice({
   name: "bugs",
@@ -15,11 +13,7 @@ const slice = createSlice({
   reducers: {
     // actions => actions handlers
     bugAdded: (state, action) => {
-      state.list.push({
-        id: ++lastId,
-        description: action.payload.description,
-        resolved: false,
-      });
+      state.list.push(action.payload);
     },
     bugResolved: (state, action) => {
       const index = state.list.findIndex((bug) => bug.id === action.payload.id);
@@ -65,6 +59,7 @@ export const {
 
 // Action Creators
 const URL = "/bugs";
+
 export const loadBugs = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.bugs;
   console.log(
@@ -83,6 +78,15 @@ export const loadBugs = () => (dispatch, getState) => {
     })
   );
 };
+
+export const addBug = (bug) =>
+  apiRequested({
+    url: URL,
+    method: "post",
+    data: bug,
+    onSuccess: bugAdded.type,
+  });
+
 // Selector using reselect lib ( Memoizing selector)
 export const getUnresolvedBugs = createSelector(
   (state) => state.entities.bugs,

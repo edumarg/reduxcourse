@@ -9,6 +9,7 @@ import {
 } from "./store/bugs";
 import { projectAdded, projectRemoved } from "./store/projects";
 import { userAdded } from "./store/users";
+import { apiRequested, apiRequestSucceed, apiRequestFail } from "./store/api";
 
 const store = configureStore();
 
@@ -63,13 +64,11 @@ console.log("Bugs from user 1", bugsByUserid);
 //   payload: { message: "An error occured" },
 // });
 
-store.dispatch({
-  type: "apiRequest",
-  payload: {
+store.dispatch(
+  apiRequested({
     url: "/bugs",
     method: "get",
     data: {},
     onSuccess: "bugsReceived",
-    onError: "apiRequestFail",
-  },
-});
+  })
+);

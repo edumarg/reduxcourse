@@ -36,8 +36,17 @@ const slice = createSlice({
       state.list[index].userId = userId;
     },
 
+    bugsRequested: (state, action) => {
+      state.loading = true;
+    },
+
     bugsReceived: (state, action) => {
       state.list = action.payload;
+      state.loading = false;
+    },
+
+    bugsRequestFailed: (state, action) => {
+      state.loading = false;
     },
   },
 });
@@ -48,6 +57,8 @@ export const {
   bugResolved,
   bugRemoved,
   bugAssignedToUser,
+  bugsRequested,
+  bugsRequestFailed,
   bugsReceived,
 } = slice.actions;
 
@@ -56,7 +67,9 @@ const URL = "/bugs";
 export const loadBugs = () =>
   apiRequested({
     url: URL,
+    onStart: bugsRequested.type,
     onSuccess: bugsReceived.type,
+    onError: bugsRequestFailed.type,
   });
 
 // Selector using reselect lib ( Memoizing selector)

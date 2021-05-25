@@ -53,12 +53,23 @@ console.log("Bugs from user 1", bugsByUserid);
 // console.log("Bugs from user 1", bugsByUserid);
 
 // middleware
-store.dispatch((dispath, getState) => {
-  dispath({ type: "bugsReceided", payload: [1, 2, 3] });
-  console.log("middleware store", getState());
-});
+// store.dispatch((dispath, getState) => {
+//   dispath({ type: "bugsReceived", payload: [1, 2, 3] });
+//   console.log("middleware store", getState());
+// });
+
+// store.dispatch({
+//   type: "error",
+//   payload: { message: "An error occured" },
+// });
 
 store.dispatch({
-  type: "error",
-  payload: { message: "An error occured" },
+  type: "apiRequest",
+  payload: {
+    url: "/bugs",
+    method: "get",
+    data: {},
+    onSuccess: "bugsReceived",
+    onError: "apiRequestFail",
+  },
 });

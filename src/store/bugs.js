@@ -43,6 +43,7 @@ const slice = createSlice({
     bugsReceived: (state, action) => {
       state.list = action.payload;
       state.loading = false;
+      state.lastFetch = Date.now();
     },
 
     bugsRequestFailed: (state, action) => {
@@ -64,14 +65,24 @@ export const {
 
 // Action Creators
 const URL = "/bugs";
-export const loadBugs = () =>
-  apiRequested({
-    url: URL,
-    onStart: bugsRequested.type,
-    onSuccess: bugsReceived.type,
-    onError: bugsRequestFailed.type,
-  });
-
+export const loadBugs = () => (dispatch, getState) => {
+  const { lastFetch } = getState().entities.bugs;
+  console.log(
+    "time passed since last fetch: ",
+    (Date.now() - lastFetch) / 1000,
+    "s"
+  );
+  // request api only if time since last fetch is more than 10 minutes or 600 seconds
+  if ((Date.now() - lastFetch) / 1000 < 600) return;
+  dispatch(
+    apiRequested({
+      url: URL,
+      onStart: bugsRequested.type,
+      onSuccess: bugsReceived.type,
+      onError: bugsRequestFailed.type,
+    })
+  );
+};
 // Selector using reselect lib ( Memoizing selector)
 export const getUnresolvedBugs = createSelector(
   (state) => state.entities.bugs,

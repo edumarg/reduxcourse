@@ -46,3 +46,14 @@ store.dispatch(bugAssignedToUser({ bugId: 2, userId: 1 }));
 
 const bugsByUserid = getBugsbyUser(1)(store.getState());
 console.log("Bugs from user 1", bugsByUserid);
+
+// The code above id the same as:
+// let bugsByUserid = getBugsbyUser(1);
+// bugsByUserid = bugsByUserid(store.getState());
+// console.log("Bugs from user 1", bugsByUserid);
+
+// middleware
+store.dispatch((dispath, getState) => {
+  dispath({ type: "bugsReceided", payload: [1, 2, 3] });
+  console.log("middleware store", getState());
+});

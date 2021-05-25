@@ -57,3 +57,8 @@ store.dispatch((dispath, getState) => {
   dispath({ type: "bugsReceided", payload: [1, 2, 3] });
   console.log("middleware store", getState());
 });
+
+store.dispatch({
+  type: "error",
+  payload: { message: "An error occured" },
+});

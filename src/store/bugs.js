@@ -26,7 +26,7 @@ const slice = createSlice({
 
     bugAssignedToUser: (state, action) => {
       const { bugId, userId } = action.payload;
-      const index = state.list.findIndex((bug) => bug.id === bugId);
+      const index = state.list.findIndex((bug) => bug.id === action.payload.id);
       state.list[index].userId = userId;
     },
 
@@ -62,13 +62,14 @@ const URL = "/bugs";
 
 export const loadBugs = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.bugs;
-  console.log(
-    "time passed since last fetch: ",
-    (Date.now() - lastFetch) / 1000,
-    "s"
-  );
-  // request api only if time since last fetch is more than 10 minutes or 600 seconds
-  if ((Date.now() - lastFetch) / 1000 < 600) return;
+  if (lastFetch)
+    console.log(
+      "time passed since last fetch: ",
+      (Date.now() - lastFetch) / 60000,
+      "min"
+    );
+  // request api only if time since last fetch is more than 10 minutes
+  if ((Date.now() - lastFetch) / 60000 < 10) return;
   dispatch(
     apiRequested({
       url: URL,
@@ -86,6 +87,24 @@ export const addBug = (bug) =>
     data: bug,
     onSuccess: bugAdded.type,
   });
+
+export const resolveBug = (bug) => {
+  return apiRequested({
+    url: `${URL}/${bug.id}`,
+    method: "patch",
+    data: { resolved: true },
+    onSuccess: bugResolved.type,
+  });
+};
+
+export const assigneUserToBug = (bug) => {
+  return apiRequested({
+    url: `${URL}/${bug.id}`,
+    method: "patch",
+    data: { userId: bug.userId },
+    onSuccess: bugAssignedToUser.type,
+  });
+};
 
 // Selector using reselect lib ( Memoizing selector)
 export const getUnresolvedBugs = createSelector(

@@ -15,7 +15,7 @@ const api =
     next(action);
     try {
       const response = await axios.request({
-        baseURL: " http://localhost:9001/api",
+        baseURL: "http://localhost:9001/api",
         url,
         method,
         data,
@@ -24,14 +24,12 @@ const api =
       // general
       dispatch(actions.apiRequestSucceed(response.data));
       // specific
-
       if (onSuccess) dispatch({ type: onSuccess, payload: response.data });
     } catch (e) {
       console.log("error: ", e.message);
 
       // general
       dispatch(actions.apiRequestFailed(e.message));
-
       // specific
       if (onError) dispatch({ type: onError, payload: e.message });
     }

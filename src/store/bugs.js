@@ -25,8 +25,8 @@ const slice = createSlice({
     },
 
     bugAssignedToUser: (state, action) => {
-      const { bugId, userId } = action.payload;
-      const index = state.list.findIndex((bug) => bug.id === action.payload.id);
+      const { id, userId } = action.payload;
+      const index = state.list.findIndex((bug) => bug.id === id);
       state.list[index].userId = userId;
     },
 
@@ -97,14 +97,13 @@ export const resolveBug = (bug) => {
   });
 };
 
-export const assigneUserToBug = (bug) => {
-  return apiRequested({
+export const assigneUserToBug = (bug) =>
+  apiRequested({
     url: `${URL}/${bug.id}`,
     method: "patch",
     data: { userId: bug.userId },
     onSuccess: bugAssignedToUser.type,
   });
-};
 
 // Selector using reselect lib ( Memoizing selector)
 export const getUnresolvedBugs = createSelector(
